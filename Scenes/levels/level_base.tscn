@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://dxq05m10rsbav"]
+
+[ext_resource type="Script" path="res://Scenes/levels/level_base.gd" id="1_vtg1x"]
+[ext_resource type="Texture2D" uid="uid://eca37li0riu2" path="res://assets/environment/back.png" id="2_gtasl"]
+[ext_resource type="TileSet" uid="uid://dhxw3f8l2saqn" path="res://assets/tilesets/tiles_world.tres" id="2_wf8gn"]
+[ext_resource type="Texture2D" uid="uid://y08ghs2v8gyy" path="res://assets/environment/middle.png" id="3_jxtl5"]
+[ext_resource type="TileSet" uid="uid://dn505hopwb4de" path="res://assets/tilesets/tiles_items.tres" id="3_pwq1q"]
+[ext_resource type="TileSet" uid="uid://blhd0ogpuydej" path="res://assets/tilesets/tiles_spikes.tres" id="4_ail78"]
+[ext_resource type="PackedScene" uid="uid://bu2jd0b8o0t36" path="res://Scenes/player.tscn" id="5_qy0qq"]
+[ext_resource type="PackedScene" uid="uid://cag4sxm5fnyns" path="res://Scenes/UI/hud.tscn" id="8_j5fpl"]
+
+[node name="LevelBase" type="Node2D"]
+script = ExtResource("1_vtg1x")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 1)
+motion_mirroring = Vector2(576, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_gtasl")
+centered = false
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.6, 1)
+motion_mirroring = Vector2(880, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+texture_repeat = 3
+position = Vector2(440, 344)
+texture = ExtResource("3_jxtl5")
+region_enabled = true
+region_rect = Rect2(0, 0, 880, 368)
+
+[node name="World" type="TileMap" parent="."]
+tile_set = ExtResource("2_wf8gn")
+format = 2
+
+[node name="Items" type="TileMap" parent="."]
+tile_set = ExtResource("3_pwq1q")
+format = 2
+
+[node name="Danger" type="TileMap" parent="." groups=["danger"]]
+tile_set = ExtResource("4_ail78")
+format = 2
+
+[node name="Player" parent="." instance=ExtResource("5_qy0qq")]
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("8_j5fpl")]
+
+[connection signal="died" from="Player" to="." method="_on_player_died"]
