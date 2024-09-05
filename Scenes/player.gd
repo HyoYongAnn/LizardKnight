@@ -17,6 +17,11 @@ func hurt():
 @export var run_speed = 150
 @export var jump_speed = -300
 
+@export var max_jumps = 2
+@export var double_jump_factor = 1.5
+
+var jump_count = 0
+
 enum {IDLE, RUN, JUMP, HURT, DEAD}
 var state = IDLE
 
@@ -32,6 +37,7 @@ func change_state(new_state):
 			$AnimationPlayer.play("run")
 		JUMP:
 			$AnimationPlayer.play("jump_up")
+			jump_count = 1
 		HURT:
 			$AnimationPlayer.play("hurt")
 			velocity.y = -200
@@ -51,7 +57,7 @@ func get_input():
 	
 	var right = Input.is_action_pressed("right")
 	var left = Input.is_action_pressed("left")
-	var jump = Input.is_action_pressed("jump")
+	var jump = Input.is_action_just_pressed("jump")
 	
 	velocity.x = 0
 	if right:
@@ -60,10 +66,19 @@ func get_input():
 	if left:
 		velocity.x -= run_speed
 		$Sprite2D.flip_h = true
-	
+
+	if jump and state == JUMP and jump_count < max_jumps and jump_count > 0:
+		$AnimationPlayer.play("jump_up")
+		velocity.y = jump_speed / double_jump_factor
+		print("double jump")
+		print(jump_count)
+		print(state)
+		jump_count += 1
 	if jump and is_on_floor():
+		print(state)
 		change_state(JUMP)
 		velocity.y = jump_speed
+		
 		
 	if state == IDLE and velocity.x != 0:
 		change_state(RUN)
@@ -97,6 +112,7 @@ func _physics_process(delta):
 	
 	if state == JUMP and is_on_floor():
 		change_state(IDLE)
+		jump_count = 0
 	if state == JUMP and velocity.y > 0:
 		$AnimationPlayer.play("jump_down")
 		
