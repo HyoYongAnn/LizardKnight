@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bu2jd0b8o0t36"]
+[gd_scene load_steps=12 format=3 uid="uid://bu2jd0b8o0t36"]
 
 [ext_resource type="Texture2D" uid="uid://dlg3gmk7yw47g" path="res://assets/player_sheet.png" id="1_x70ys"]
 [ext_resource type="Script" path="res://Scenes/player.gd" id="1_xg3kl"]
@@ -112,6 +112,9 @@ _data = {
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tf2j3"]
 
+[sub_resource type="Gradient" id="Gradient_vltls"]
+colors = PackedColorArray(0.610389, 0.41054, 0.135611, 1, 0.611765, 0.411765, 0.137255, 0)
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 13
@@ -136,3 +139,19 @@ shape = SubResource("RectangleShape2D_tf2j3")
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2.5, 2.5)
 limit_top = 0
+
+[node name="Dust" type="CPUParticles2D" parent="."]
+position = Vector2(-2, 0)
+rotation = -1.5708
+emitting = false
+amount = 20
+lifetime = 0.45
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.7
+emission_shape = 3
+emission_rect_extents = Vector2(1, 6)
+gravity = Vector2(0, 0)
+initial_velocity_max = 10.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_vltls")

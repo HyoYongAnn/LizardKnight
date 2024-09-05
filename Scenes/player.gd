@@ -108,6 +108,10 @@ func _physics_process(delta):
 				velocity.y = -200
 			else:
 				hurt()
+				
+	if state == JUMP and is_on_floor():
+		change_state(IDLE)
+		$Dust.emitting = true
 
 	
 	if state == JUMP and is_on_floor():
